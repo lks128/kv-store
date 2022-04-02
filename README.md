@@ -29,6 +29,6 @@ Example how to get value
 
 ## Setup
 
-Setup assumes a Kubernetes clusetr with existing Flux configured for it. For installation copy the kv-store and postrgesql directories to the flux repository and it will configure the deployments.
+Setup assumes a Kubernetes clusetr with existing Flux configured for it. For installation copy the flux-cluster/kv-store and flux-cluster/postrgesql directories to the flux repository and it will configure the deployments.
 
 Wait for postgresql to become available and then use `setup-pg.sh` to initialize schema and create user.

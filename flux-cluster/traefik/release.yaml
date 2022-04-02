@@ -1,0 +1,24 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: traefik
+  namespace: default
+spec:
+  interval: 1h
+  releaseName: traefik
+  chart:
+    spec:
+      chart: traefik
+      sourceRef:
+        kind: HelmRepository
+        name: traefik
+  values:
+    volumes:
+    - name: traefik-config
+      mountPath: /etc/traefik
+      type: configMap
+    - name: traefik-tls
+      mountPath: /cert
+      type: secret
+    additionalArguments:
+    - "--providers.file.filename=/etc/traefik/dynamic.yaml"
