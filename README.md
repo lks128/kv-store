@@ -29,7 +29,7 @@ Example how to get value
 
 ## Setup
 
-Setup assumes a Kubernetes clusetr with existing Flux configured for it. For installation copy the flux-cluster/kv-store and flux-cluster/postrgesql directories to the flux repository and it will configure the deployments.
+Setup assumes a Kubernetes clusetr with existing Flux configured for it. For installation copy the flux-cluster/traefik, flux-cluster/kv-store and flux-cluster/postrgesql directories to the flux repository along with flulx-system and it will configure the deployments.
 
 Wait for postgresql to become available and then use `setup-pg.sh` to initialize schema and create user.
 
@@ -48,6 +48,34 @@ kubectl create secret docker-registry ecr-credentials \
 
 Traefik requires TLS certificates to be present in the cluster so that it can serve HTTPS traffic.
 
+Certificate can be nicely generated with Ansible:
+
 ```
-kubectl create secret generic traefik-tls --from-file fullchain.pem=fullchain.pem privkey.pem=privatekey.pem
+#!/usr/bin/env ansible-playbook
+
+- name: Generate TLS certifiacte
+  hosts: localhost
+  connection: local
+  tasks:
+  - openssl_privatekey:
+      path: cert.key
+    register: key
+  
+  - openssl_csr:
+      path: cert.csr
+      privatekey_path: "{{ key.filename }}"
+      common_name: kv-store.example.com
+      subject_alt_name:
+      - DNS:kv-store.example.com
+    register: csr
+  
+  - openssl_certificate:
+      path: cert.crt
+      privatekey_path: "{{ key.filename }}"
+      csr_path: "{{ csr.filename }}"
+      provider: selfsigned
+```
+
+```
+kubectl create secret generic traefik-tls --from-file fullchain.pem=cert.crt privkey.pem=cert.key
 ```
