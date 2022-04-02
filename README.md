@@ -26,3 +26,9 @@ Example how to get value
 % curl  https://kv-store.defmacro.eu/test                                         
 {"status": "ok", "data": {"key": "test", "value": "abcd"}}%
 ```
+
+## Setup
+
+Setup assumes a Kubernetes clusetr with existing Flux configured for it. For installation copy the kv-store and postrgesql directories to the flux repository and it will configure the deployments.
+
+Wait for postgresql to become available and then use `setup-pg.sh` to initialize schema and create user.
