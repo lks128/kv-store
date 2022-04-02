@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"
+    # TODO: enable authentication on ingress
+    #traefik.ingress.kubernetes.io/router.middlewares: "default-auth-kv-store@kubernetescrd"
+  name: kv-store
+  namespace: default
+spec:
+  rules:
+  - host: kv-store.defmacro.eu
+    http:
+      paths:
+      - pathType: Prefix
+        path: /
+        backend:
+          service:
+            name: kv-store
+            port:
+              name: http

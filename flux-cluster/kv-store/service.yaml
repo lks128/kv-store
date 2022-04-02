@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: kv-store
+  name: kv-store
+  namespace: default
+spec:
+  ports:
+  - port: 80
+    name: http
+    protocol: TCP
+    targetPort: 5000
+  selector:
+    app: kv-store
+  type: ClusterIP
