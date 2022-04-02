@@ -77,5 +77,5 @@ Certificate can be nicely generated with Ansible:
 ```
 
 ```
-kubectl create secret generic traefik-tls --from-file fullchain.pem=cert.crt privkey.pem=cert.key
+kubectl create secret generic traefik-tls --from-file fullchain.pem=cert.crt --from-file privkey.pem=cert.key
 ```
