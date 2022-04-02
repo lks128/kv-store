@@ -32,3 +32,22 @@ Example how to get value
 Setup assumes a Kubernetes clusetr with existing Flux configured for it. For installation copy the flux-cluster/kv-store and flux-cluster/postrgesql directories to the flux repository and it will configure the deployments.
 
 Wait for postgresql to become available and then use `setup-pg.sh` to initialize schema and create user.
+
+### ECR pull token
+
+Run `aws configure` and provide credentials from mail and then create `ecr-credentials` imagePullSecret.
+
+```shell
+kubectl create secret docker-registry ecr-credentials \
+  --docker-server=722387802726.dkr.ecr.eu-central-1.amazonaws.com \
+  --docker-username=AWS \
+  --docker-password=$(aws ecr get-login-password --region eu-central-1)
+```
+
+### Traefik SSL
+
+Traefik requires TLS certificates to be present in the cluster so that it can serve HTTPS traffic.
+
+```
+kubectl create secret generic traefik-tls --from-file fullchain.pem=fullchain.pem privkey.pem=privatekey.pem
+```
